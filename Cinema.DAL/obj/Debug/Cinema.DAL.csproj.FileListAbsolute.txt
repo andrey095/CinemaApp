@@ -1,0 +1,12 @@
+D:\Source\repos\CinemaApp\Cinema.DAL\bin\Debug\Cinema.DAL.dll.config
+D:\Source\repos\CinemaApp\Cinema.DAL\bin\Debug\Cinema.DAL.dll
+D:\Source\repos\CinemaApp\Cinema.DAL\bin\Debug\Cinema.DAL.pdb
+D:\Source\repos\CinemaApp\Cinema.DAL\bin\Debug\EntityFramework.dll
+D:\Source\repos\CinemaApp\Cinema.DAL\bin\Debug\EntityFramework.SqlServer.dll
+D:\Source\repos\CinemaApp\Cinema.DAL\bin\Debug\EntityFramework.xml
+D:\Source\repos\CinemaApp\Cinema.DAL\bin\Debug\EntityFramework.SqlServer.xml
+D:\Source\repos\CinemaApp\Cinema.DAL\bin\Debug\ru\EntityFramework.resources.dll
+D:\Source\repos\CinemaApp\Cinema.DAL\obj\Debug\Cinema.DAL.csproj.CoreCompileInputs.cache
+D:\Source\repos\CinemaApp\Cinema.DAL\obj\Debug\Cinema.DAL.csproj.CopyComplete
+D:\Source\repos\CinemaApp\Cinema.DAL\obj\Debug\Cinema.DAL.dll
+D:\Source\repos\CinemaApp\Cinema.DAL\obj\Debug\Cinema.DAL.pdb
