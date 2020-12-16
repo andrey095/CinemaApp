@@ -22,7 +22,7 @@ namespace Cinema.DAL.DomainModels
 
         public int HallId { get; set; }
 
-        [StringLength(400)]
+        [StringLength(2000)]
         public string Description { get; set; }
 
         [Column(TypeName = "money")]

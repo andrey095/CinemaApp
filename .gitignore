@@ -1,0 +1,7 @@
+.vs/
+Cinema.DAL/bin/
+Cinema.DAL/obj/
+Cinema.WPF/bin/
+Cinema.WPF/obj/
+CinemaServer.Console/bin/
+CinemaServer.Console/obj/

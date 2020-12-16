@@ -4,16 +4,19 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:res="clr-namespace:Cinema.WPF.ViewModels"
+        xmlns:mod="clr-namespace:Cinema.WPF.Models"
         xmlns:local="clr-namespace:Cinema.WPF"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Cinema" Height="550" Width="950" MinHeight="420" MinWidth="470" Name="mainW" Icon="/Cinema.WPF;component/Resources/images2.png">
     <Window.DataContext>
         <res:MainWindowVM/>
     </Window.DataContext>
     <Window.Resources>
-        <res:ImageBytesToImageConverter x:Key="imgConv"/>
+        <mod:ImageBytesToImageConverter x:Key="imgConv"/>
+        <mod:SizeConvertor x:Key="sizeConv"/>
+        <mod:DateToTimeConvertor x:Key="dateConv"/>
     </Window.Resources>
-    <Grid>
+    <Grid x:Name="grd0" Background="LemonChiffon">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
@@ -22,36 +25,67 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="auto"/>
         </Grid.ColumnDefinitions>
-        <StackPanel Orientation="Horizontal"  Grid.Row="0" Grid.Column="0" HorizontalAlignment="Stretch" Background="#FFF0F0F0" Name="st">
+        <StackPanel Orientation="Horizontal"  Grid.Row="0" Grid.Column="0" HorizontalAlignment="Stretch" Background="#FFF0F0F0">
             <ComboBox ItemsSource="{Binding Cities}"  SelectedItem="{Binding CurrCity}"   DisplayMemberPath="Name" SelectedIndex="0" Width="100"/>
             <ComboBox ItemsSource="{Binding Cinemas}" SelectedItem="{Binding CurrCinema}" DisplayMemberPath="Name" SelectedIndex="0" Width="150"/>
         </StackPanel>
-        <Menu Grid.Row="0" Grid.Column="1" Name="rt">
-            <MenuItem Header="Login">
-                <Grid Margin="-35 0 -50 0">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <TextBox Text="Login" Grid.Row="0" Grid.Column="1" Width="100"/>
-                    <PasswordBox Password="Password" Grid.Row="1" Grid.Column="1" Width="100"/>
-                </Grid>
-            </MenuItem>
-        </Menu>
-        <ListBox ItemsSource="{Binding Films}" Grid.Row="1" ScrollViewer.CanContentScroll="False">
+        <Button Grid.Row="0" Grid.Column="7943" Content="{Binding UserName}" Command="{Binding Login}"/>
+        <ListBox ItemsSource="{Binding Films}" SelectedItem="{Binding CurrFilm}" Grid.Row="1" Grid.Column="0" ScrollViewer.HorizontalScrollBarVisibility="Visible" ScrollViewer.CanContentScroll="False" Background="LemonChiffon">
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <VirtualizingStackPanel IsItemsHost="True" Orientation="Horizontal" VerticalAlignment="Top"/>
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <StackPanel Margin="5">
-                        <Image Width="100" Height="75" Source="{Binding Path=Picture, Converter={StaticResource imgConv}}" />
-                        <TextBlock FontSize="16" Width="200" Text="{Binding Path=Name}" HorizontalAlignment="Center" />
-                        <TextBlock FontSize="16" Width="200" TextWrapping="Wrap" Height="50" ScrollViewer.VerticalScrollBarVisibility="Visible" Text="{Binding Path=Description}" HorizontalAlignment="Center" />
-                    </StackPanel>
+                    <Grid Width="200" VerticalAlignment="Top">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Image Grid.Row="0" Source="{Binding Path=Picture, Converter={StaticResource imgConv}}"/>
+                        <TextBlock Grid.Row="1" TextWrapping="Wrap" Text="{Binding Path=Name}" Height="30" TextAlignment="Center"/>
+                        <TextBox   Grid.Row="2" TextWrapping="Wrap" Text="{Binding Path=Description}" IsReadOnly="True" BorderThickness="0" Height="{Binding ElementName=mainW, Path=Height, Converter={StaticResource sizeConv}, ConverterParameter=418}"  Background="LemonChiffon"/>
+                    </Grid>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
+        <Border Grid.Row="1" Grid.Column="1" BorderBrush="DarkGray" BorderThickness="3">
+            <Grid Width="200">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+                <Image Grid.Row="0" Source="{Binding Path=CurrFilm.Picture, Converter={StaticResource imgConv}}"/>
+                <TextBlock Grid.Row="1" TextWrapping="Wrap" Text="{Binding Path=CurrFilm.Name}" Height="30" TextAlignment="Center"/>
+                <ComboBox Grid.Row="2" ItemsSource="{Binding FilmsDates}" SelectedItem="{Binding CurrDate}" ItemStringFormat="dd MMMM yyyy"/>
+                <ListBox Grid.Row="3" ItemsSource="{Binding FilmsSessions}" ScrollViewer.CanContentScroll="False" Background="LemonChiffon">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                                <TextBlock TextWrapping="Wrap" Text="{Binding Hall.Name}"/>
+                                <ListBox ItemsSource="{Binding Sessions}" BorderThickness="0" Background="LemonChiffon">
+                                    <ListBox.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <VirtualizingStackPanel IsItemsHost="True" Orientation="Horizontal"/>
+                                        </ItemsPanelTemplate>
+                                    </ListBox.ItemsPanel>
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <Button Content="{Binding Date, Converter={StaticResource dateConv}}" Command="{Binding ElementName=grd0, Path=DataContext.BuyTicket}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=Self}, Path=DataContext}" Background="LightGreen"/>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+                <Button Grid.Row="4" Content="Show Details" Command="{Binding ShowDetails}"/>
+            </Grid>
+        </Border>
     </Grid>
 </Window>

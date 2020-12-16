@@ -12,7 +12,6 @@ namespace Cinema.DAL.DomainModels
         public City()
         {
             Cinemas = new HashSet<Cinema>();
-            Users = new HashSet<User>();
         }
 
         public int Id { get; set; }
@@ -22,9 +21,6 @@ namespace Cinema.DAL.DomainModels
         public string Name { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public ICollection<Cinema> Cinemas { get; set; }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public ICollection<User> Users { get; set; }
+        public virtual ICollection<Cinema> Cinemas { get; set; }
     }
 }

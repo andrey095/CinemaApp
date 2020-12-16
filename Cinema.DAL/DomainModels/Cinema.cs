@@ -32,7 +32,7 @@ namespace Cinema.DAL.DomainModels
         [StringLength(20)]
         public string Tel { get; set; }
 
-        [StringLength(400)]
+        [StringLength(2000)]
         public string Description { get; set; }
 
         public virtual City City { get; set; }
@@ -40,9 +40,9 @@ namespace Cinema.DAL.DomainModels
         public virtual Street Street { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public ICollection<Employee> Employees { get; set; }
+        public virtual ICollection<Employee> Employees { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public ICollection<Hall> Halls { get; set; }
+        public virtual ICollection<Hall> Halls { get; set; }
     }
 }

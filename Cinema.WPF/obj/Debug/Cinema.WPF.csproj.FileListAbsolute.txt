@@ -23,3 +23,10 @@ D:\Source\repos\CinemaApp\Cinema.WPF\bin\Debug\EntityFramework.xml
 D:\Source\repos\CinemaApp\Cinema.WPF\bin\Debug\EntityFramework.SqlServer.xml
 D:\Source\repos\CinemaApp\Cinema.WPF\bin\Debug\ru\EntityFramework.resources.dll
 D:\Source\repos\CinemaApp\Cinema.WPF\obj\Debug\Cinema.WPF.csproj.CopyComplete
+D:\Source\repos\CinemaApp\Cinema.WPF\obj\Debug\Views\LoginWindow.g.cs
+D:\Source\repos\CinemaApp\Cinema.WPF\obj\Debug\Views\LoginWindow.baml
+D:\Source\repos\CinemaApp\Cinema.WPF\obj\Debug\Views\FilmWindow.g.cs
+D:\Source\repos\CinemaApp\Cinema.WPF\obj\Debug\Views\FilmWindow.baml
+D:\Source\repos\CinemaApp\Cinema.WPF\obj\Debug\Views\PlacesInCinemaWindow.g.cs
+D:\Source\repos\CinemaApp\Cinema.WPF\obj\Debug\Views\PlacesInCinemaWindow.baml
+D:\Source\repos\CinemaApp\Cinema.WPF\bin\Debug\ru\EntityFramework.SqlServer.resources.dll

@@ -10,3 +10,5 @@ D:\Source\repos\CinemaApp\Cinema.DAL\obj\Debug\Cinema.DAL.csproj.CoreCompileInpu
 D:\Source\repos\CinemaApp\Cinema.DAL\obj\Debug\Cinema.DAL.csproj.CopyComplete
 D:\Source\repos\CinemaApp\Cinema.DAL\obj\Debug\Cinema.DAL.dll
 D:\Source\repos\CinemaApp\Cinema.DAL\obj\Debug\Cinema.DAL.pdb
+D:\Source\repos\CinemaApp\Cinema.DAL\obj\Debug\Cinema.DAL.csprojAssemblyReference.cache
+D:\Source\repos\CinemaApp\Cinema.DAL\bin\Debug\ru\EntityFramework.SqlServer.resources.dll

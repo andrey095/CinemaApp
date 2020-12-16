@@ -1,35 +1,178 @@
-﻿using System;
+﻿using Cinema.DAL.DomainModels;
+using CinemaServer.Console.Models;
+using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
+using TableDependency.SqlClient;
+using TableDependency.SqlClient.Base;
+using TableDependency.SqlClient.Base.Enums;
 
 namespace CinemaServer.Console
 {
     class Program
     {
         static TcpListener server;
-        static List<TcpClient> clients;
-        static async Task Main(string[] args)
+        static List<ClientsSessions> ClientsSessions;
+
+        static CinemaContext context;
+        static SqlTableDependency<Ticket> sqlTableTicketDependency;
+        static void Main(string[] args)
         {
-            server = new TcpListener(IPAddress.Parse("127.0.0.1"), 14888);
+            context = new CinemaContext();
+            ClientsSessions = new List<ClientsSessions>();
+            Task.Run(() =>
+            {
+                foreach (var item in ClientsSessions)
+                {
+                    for (int i = item.Clients.Count; i > 0; i++)
+                    {
+                        if (item.Clients[i].Connected == false)
+                            item.Clients.Remove(item.Clients[i]);
+                    }
+                }
+            });
+
+            server = new TcpListener(IPAddress.Parse(ConfigurationManager.AppSettings["LocalIpAddress"]), int.Parse(ConfigurationManager.AppSettings["LocalPort"]));
+            System.Console.WriteLine("Server started!!!");
             server.Start();
             do
             {
-                TcpClient client = await server.AcceptTcpClientAsync();
-                clients.Add(client);
-                await Task.Factory.StartNew(() => 
+                TcpClient client = server.AcceptTcpClient();
+                Task.Run(() => 
                 {
-                    ClientBuy(client.GetStream());
-                }, TaskCreationOptions.LongRunning);
+                    System.Console.WriteLine($"connected: {client.Client.RemoteEndPoint}");
+                    ClientBuy(client);
+                });
             } while (true);
         }
-
-        static void ClientBuy(NetworkStream ns)
+        void InitNotifyChangeTicket()
         {
-
+            var mapper_g = new ModelToTableMapper<Ticket>();
+            mapper_g.AddMapping(t => t.Id, "Id");
+            mapper_g.AddMapping(t => t.Date, "Date");
+            mapper_g.AddMapping(t => t.SessionId, "SessionId");
+            mapper_g.AddMapping(t => t.EmployeeId, "EmployeeId");
+            mapper_g.AddMapping(t => t.UserId, "UserId");
+            mapper_g.AddMapping(t => t.Row, "Row");
+            mapper_g.AddMapping(t => t.Place, "Place");
+            mapper_g.AddMapping(t => t.Price, "Price");
+            mapper_g.AddMapping(t => t.IsReturned, "IsReturned");
+            sqlTableTicketDependency = new SqlTableDependency<Ticket>(context.Database.Connection.ConnectionString, "Tickets", mapper: mapper_g);
+            sqlTableTicketDependency.OnChanged += DepTicket_OnChanged;
+            sqlTableTicketDependency.Start();
+        }
+        private void DepTicket_OnChanged(object sender, TableDependency.SqlClient.Base.EventArgs.RecordChangedEventArgs<Ticket> e)
+        {
+            var changedEntity = e.Entity;
+            switch (e.ChangeType)
+            {
+                case ChangeType.Update:
+                    foreach (var item in Goods)
+                    {
+                        if (item.GoodId == e.Entity.GoodId)
+                        {
+                            item.GoodName = e.Entity.GoodName;
+                            item.GoodCount = e.Entity.GoodCount;
+                            item.Price = e.Entity.Price;
+                            item.ProducerId = e.Entity.ProducerId;
+                            item.CategoryId = e.Entity.CategoryId;
+                            item.Category = new Category { CategoryId = (int)e.Entity.CategoryId };
+                        }
+                    }
+                    if (SelectedGood.GoodId == e.Entity.GoodId)
+                        OnPropertyChanged("SelectedGood");
+                    break;
+                case ChangeType.Insert:
+                    var currSess = ClientsSessions.FirstOrDefault(c => c.Session.Id == e.Entity.SessionId);
+                    if(currSess != null)
+                    {
+                        var arr = Encoding.Unicode.GetBytes($"{e.Entity.Row}/{e.Entity.Place}");
+                        foreach (var item in currSess.Clients)
+                        {
+                            using (var ns = item.GetStream())
+                            {
+                                ns.Write(arr, 0, arr.Length);
+                            }
+                        }
+                    }
+                    break;
+            }
+        }
+        static void ClientBuy(TcpClient client)
+        {
+            string cl = client.Client.RemoteEndPoint.ToString();
+            var currSess = ClientsSessions.FirstOrDefault();
+            try
+            {
+                using (var ns = client.GetStream())
+                {
+                    BinaryFormatter bf = new BinaryFormatter();
+                    int id = (int)bf.Deserialize(ns);
+                    Session session = context.Sessions.FirstOrDefault(s => s.Id == id);
+                    System.Console.WriteLine($"{cl}: {session?.Id}");
+                    currSess = ClientsSessions.FirstOrDefault(c => c.Session.Id == session.Id);
+                    if (currSess == null)
+                    {
+                        ClientsSessions.Add(new ClientsSessions(session));
+                        currSess = ClientsSessions.FirstOrDefault(c => c.Session.Id == session.Id);
+                    }
+                    currSess.Clients.Add(client);
+                    byte[] arr = new byte[20];
+                    //StreamReader sr = new StreamReader(ns, Encoding.Unicode);
+                    do
+                    {
+                        int len = ns.Read(arr, 0, arr.Length);
+                        string loc = Encoding.Unicode.GetString(arr, 0, len);
+                        //string loc = sr.ReadLine();
+                        if (loc.Length > 1)
+                        {
+                            System.Console.WriteLine($"{cl}: {loc}");
+                            //foreach (var item in currSess.Clients)
+                            //{
+                            //    if (item == client)
+                            //        continue;
+                            //    //using (var sw = new StreamWriter(item.GetStream(), Encoding.Unicode))
+                            //    //{
+                            //    //    sw.WriteLine(loc);
+                            //    //}
+                            //    try
+                            //    {
+                            //        using (var ns1 = item.GetStream())
+                            //        {
+                            //            ns1.Write(arr, 0, len);
+                            //        }
+                            //    }
+                            //    catch
+                            //    {
+                            //    }
+                            //}
+                            for (int i = 0; i < currSess.Clients.Count; i++)
+                            {
+                                if (currSess.Clients[i] == client)
+                                    continue;
+                                /*using (*/
+                                var ns1 = currSess.Clients[i].GetStream();// поменять один поток на два
+                                {
+                                    ns1.Write(arr, 0, len);
+                                }
+                            }
+                        }
+                    } while (client.Connected);
+                    currSess.Clients.Remove(client);
+                }
+            }
+            catch(Exception ex)
+            {
+                System.Console.WriteLine($"problem with: {cl}");
+                currSess.Clients.Remove(client);
+            }
         }
     }
 }

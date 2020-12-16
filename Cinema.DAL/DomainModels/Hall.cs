@@ -27,7 +27,7 @@ namespace Cinema.DAL.DomainModels
 
         public int SeatsLux { get; set; }
 
-        [StringLength(400)]
+        [StringLength(2000)]
         public string Description { get; set; }
 
         public virtual Cinema Cinema { get; set; }

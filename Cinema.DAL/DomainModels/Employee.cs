@@ -48,6 +48,8 @@ namespace Cinema.DAL.DomainModels
 
         public virtual Position Position { get; set; }
 
+        public virtual EmployeesLogin EmployeesLogin { get; set; }
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Ticket> Tickets { get; set; }
     }

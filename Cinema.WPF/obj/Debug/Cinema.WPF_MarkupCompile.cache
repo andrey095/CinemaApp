@@ -10,11 +10,11 @@ none
 false
 DEBUG;TRACE
 D:\Source\repos\CinemaApp\Cinema.WPF\App.xaml
-11892971807
+41797706826
 
-6-1332915300
-17-62762012
-Views\MainWindow.xaml;
+17-930812611
+18-1786174855
+Views\FilmWindow.xaml;Views\LoginWindow.xaml;Views\MainWindow.xaml;Views\PlacesInCinemaWindow.xaml;
 
-False
+True
 
