@@ -18,25 +18,11 @@ namespace Cinema.DAL.DomainModels
 
         [Required]
         [StringLength(20)]
-        public string Firstname { get; set; }
+        public string Password { get; set; }
 
         [Required]
-        [StringLength(20)]
-        public string Lastname { get; set; }
-
-        [Required]
-        [StringLength(50)]
+        [StringLength(30)]
         public string Email { get; set; }
-
-        public DateTime Birthdate { get; set; }
-
-        [Required]
-        [StringLength(20)]
-        public string Phone { get; set; }
-
-        public int CityId { get; set; }
-
-        public virtual City City { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Ticket> Tickets { get; set; }

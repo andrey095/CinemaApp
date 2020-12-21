@@ -68,6 +68,7 @@
     <Compile Include="DomainModels\City.cs" />
     <Compile Include="DomainModels\Country.cs" />
     <Compile Include="DomainModels\Employee.cs" />
+    <Compile Include="DomainModels\EmployeesLogin.cs" />
     <Compile Include="DomainModels\Film.cs" />
     <Compile Include="DomainModels\FilmCountry.cs" />
     <Compile Include="DomainModels\FilmGenre.cs" />

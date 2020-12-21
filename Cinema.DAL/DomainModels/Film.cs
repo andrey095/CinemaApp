@@ -27,7 +27,7 @@ namespace Cinema.DAL.DomainModels
         public string NameOrigin { get; set; }
 
         [Required]
-        [StringLength(400)]
+        [StringLength(2000)]
         public string Description { get; set; }
 
         public int Age { get; set; }

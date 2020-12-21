@@ -16,6 +16,7 @@ namespace Cinema.DAL.DomainModels
         public virtual DbSet<City> Cities { get; set; }
         public virtual DbSet<Country> Countries { get; set; }
         public virtual DbSet<Employee> Employees { get; set; }
+        public virtual DbSet<EmployeesLogin> EmployeesLogins { get; set; }
         public virtual DbSet<FilmCountry> FilmCountries { get; set; }
         public virtual DbSet<FilmGenre> FilmGenres { get; set; }
         public virtual DbSet<Film> Films { get; set; }
@@ -46,11 +47,6 @@ namespace Cinema.DAL.DomainModels
                 .WithRequired(e => e.City)
                 .WillCascadeOnDelete(false);
 
-            modelBuilder.Entity<City>()
-                .HasMany(e => e.Users)
-                .WithRequired(e => e.City)
-                .WillCascadeOnDelete(false);
-
             modelBuilder.Entity<Country>()
                 .HasMany(e => e.FilmCountries)
                 .WithRequired(e => e.Country)
@@ -60,6 +56,10 @@ namespace Cinema.DAL.DomainModels
                 .HasMany(e => e.Employees1)
                 .WithOptional(e => e.Employee1)
                 .HasForeignKey(e => e.ManagerId);
+
+            modelBuilder.Entity<Employee>()
+                .HasOptional(e => e.EmployeesLogin)
+                .WithRequired(e => e.Employee);
 
             modelBuilder.Entity<Film>()
                 .HasMany(e => e.FilmCountries)

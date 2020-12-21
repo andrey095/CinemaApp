@@ -31,7 +31,7 @@ namespace Cinema.DAL.DomainModels
 
         public DateTime Hiredate { get; set; }
 
-        public int CinemaId { get; set; }
+        public int? CinemaId { get; set; }
 
         [Required]
         [StringLength(20)]
@@ -47,6 +47,8 @@ namespace Cinema.DAL.DomainModels
         public virtual Employee Employee1 { get; set; }
 
         public virtual Position Position { get; set; }
+
+        public virtual EmployeesLogin EmployeesLogin { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Ticket> Tickets { get; set; }
