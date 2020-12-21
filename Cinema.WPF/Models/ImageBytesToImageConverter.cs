@@ -14,11 +14,14 @@ namespace Cinema.WPF.Models
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            MemoryStream ms = new MemoryStream((byte[])value);
             var t = new BitmapImage();
-            t.BeginInit();
-            t.StreamSource = ms;
-            t.EndInit();
+            if (value != null)
+            {
+                MemoryStream ms = new MemoryStream((byte[])value);
+                t.BeginInit();
+                t.StreamSource = ms;
+                t.EndInit();
+            }
             return t;
         }
 

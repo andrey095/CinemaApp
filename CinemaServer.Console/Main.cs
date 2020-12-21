@@ -27,6 +27,7 @@ namespace CinemaServer.Console
         {
             context = new CinemaContext();
             ClientsSessions = new List<ClientsSessions>();
+            InitNotifyChangeTicket();
             Task.Run(() =>
             {
                 foreach (var item in ClientsSessions)
@@ -52,7 +53,7 @@ namespace CinemaServer.Console
                 });
             } while (true);
         }
-        void InitNotifyChangeTicket()
+        static void InitNotifyChangeTicket()
         {
             var mapper_g = new ModelToTableMapper<Ticket>();
             mapper_g.AddMapping(t => t.Id, "Id");
@@ -68,27 +69,12 @@ namespace CinemaServer.Console
             sqlTableTicketDependency.OnChanged += DepTicket_OnChanged;
             sqlTableTicketDependency.Start();
         }
-        private void DepTicket_OnChanged(object sender, TableDependency.SqlClient.Base.EventArgs.RecordChangedEventArgs<Ticket> e)
+        static void DepTicket_OnChanged(object sender, TableDependency.SqlClient.Base.EventArgs.RecordChangedEventArgs<Ticket> e)
         {
             var changedEntity = e.Entity;
             switch (e.ChangeType)
             {
                 case ChangeType.Update:
-                    foreach (var item in Goods)
-                    {
-                        if (item.GoodId == e.Entity.GoodId)
-                        {
-                            item.GoodName = e.Entity.GoodName;
-                            item.GoodCount = e.Entity.GoodCount;
-                            item.Price = e.Entity.Price;
-                            item.ProducerId = e.Entity.ProducerId;
-                            item.CategoryId = e.Entity.CategoryId;
-                            item.Category = new Category { CategoryId = (int)e.Entity.CategoryId };
-                        }
-                    }
-                    if (SelectedGood.GoodId == e.Entity.GoodId)
-                        OnPropertyChanged("SelectedGood");
-                    break;
                 case ChangeType.Insert:
                     var currSess = ClientsSessions.FirstOrDefault(c => c.Session.Id == e.Entity.SessionId);
                     if(currSess != null)
@@ -124,47 +110,36 @@ namespace CinemaServer.Console
                         currSess = ClientsSessions.FirstOrDefault(c => c.Session.Id == session.Id);
                     }
                     currSess.Clients.Add(client);
-                    byte[] arr = new byte[20];
-                    //StreamReader sr = new StreamReader(ns, Encoding.Unicode);
+                    byte[] arr;
+                    foreach (var item in currSess.Places)
+                    {
+                        arr = Encoding.Unicode.GetBytes($"{item.row}/{item.place}");
+                        ns.Write(arr, 0, arr.Length);
+                    }
+                    arr = new byte[20];
                     do
                     {
                         int len = ns.Read(arr, 0, arr.Length);
                         string loc = Encoding.Unicode.GetString(arr, 0, len);
-                        //string loc = sr.ReadLine();
                         if (loc.Length > 1)
                         {
                             System.Console.WriteLine($"{cl}: {loc}");
-                            //foreach (var item in currSess.Clients)
-                            //{
-                            //    if (item == client)
-                            //        continue;
-                            //    //using (var sw = new StreamWriter(item.GetStream(), Encoding.Unicode))
-                            //    //{
-                            //    //    sw.WriteLine(loc);
-                            //    //}
-                            //    try
-                            //    {
-                            //        using (var ns1 = item.GetStream())
-                            //        {
-                            //            ns1.Write(arr, 0, len);
-                            //        }
-                            //    }
-                            //    catch
-                            //    {
-                            //    }
-                            //}
-                            for (int i = 0; i < currSess.Clients.Count; i++)
+                            foreach (var item in currSess.Clients)
                             {
-                                if (currSess.Clients[i] == client)
+                                if (item == client)
                                     continue;
-                                /*using (*/
-                                var ns1 = currSess.Clients[i].GetStream();// поменять один поток на два
-                                {
-                                    ns1.Write(arr, 0, len);
-                                }
+                                var ns1 = item.GetStream();
+                                ns1.Write(arr, 0, len);
                             }
+                            int row = int.Parse(loc.Substring(0, loc.IndexOf('/')));
+                            int place = int.Parse(loc.Substring(loc.IndexOf('/') + 1));
+                            if (currSess.Places.FirstOrDefault(p => p.row == row && p.place == place) == default)
+                                currSess.Places.Add((row, place));
+                            else
+                                currSess.Places.Remove((row, place));
                         }
                     } while (client.Connected);
+                    System.Console.WriteLine($"{cl}: disconnected");
                     currSess.Clients.Remove(client);
                 }
             }

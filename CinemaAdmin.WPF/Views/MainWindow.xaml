@@ -1,0 +1,578 @@
+﻿<Window x:Class="CinemaAdmin.WPF.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:res="clr-namespace:CinemaAdmin.WPF.ViewModels"
+        xmlns:local="clr-namespace:CinemaAdmin.WPF"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Window.DataContext>
+        <res:MainWindowVM/>
+    </Window.DataContext>
+    <Grid>
+        <TabControl>
+            <TabItem Header="Города">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid Grid.Column="0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="auto"/>
+                        </Grid.RowDefinitions>
+                        <ListBox Grid.Row="0" ItemsSource="{Binding Cities}" SelectedItem="{Binding CurrCity}" DisplayMemberPath="Name"/>
+                        <Button Grid.Row="1" Content="Добавить город" Command="{Binding AddCity}"/>
+                    </Grid>
+                    <Grid Grid.Column="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="auto"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Column="0" Grid.Row="0" Padding="10" Text="Город:"/>
+                        <TextBox Grid.Column="1" Grid.Row="0" Padding="10" Text="{Binding CurrCity.Name}"/>
+                        <Button    Grid.Column="1" Grid.Row="8" Content="Сохранить изменения" Command="{Binding Save}"/>
+                    </Grid>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Улицы">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid Grid.Column="0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="auto"/>
+                        </Grid.RowDefinitions>
+                        <ListBox Grid.Row="0" ItemsSource="{Binding Streets}" SelectedItem="{Binding CurrStreet}" DisplayMemberPath="Name"/>
+                        <Button Grid.Row="1" Content="Добавить улицу" Command="{Binding AddStreet}"/>
+                    </Grid>
+                    <Grid Grid.Column="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="auto"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Column="0" Grid.Row="0" Padding="10" Text="Улица:"/>
+                        <TextBox Grid.Column="1" Grid.Row="0" Padding="10" Text="{Binding CurrStreet.Name}"/>
+                        <Button    Grid.Column="1" Grid.Row="8" Content="Сохранить изменения" Command="{Binding Save}"/>
+                    </Grid>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Кинотеатры">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid Grid.Column="0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="auto"/>
+                        </Grid.RowDefinitions>
+                        <ListBox Grid.Row="0" ItemsSource="{Binding Cinemas}" SelectedItem="{Binding CurrCinema}" DisplayMemberPath="Name"/>
+                        <Button Grid.Row="1" Content="Добавить кинотеатр" Command="{Binding AddCinema}"/>
+                    </Grid>
+                    <Grid Grid.Column="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="auto"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Column="0" Grid.Row="0" Padding="10" Text="Кинотеатр:"/>
+                        <TextBox   Grid.Column="1" Grid.Row="0" Padding="10" Text="{Binding CurrCinema.Name}"/>
+                        <TextBlock Grid.Column="0" Grid.Row="2" Padding="10" Text="Город:"/>
+                        <ComboBox  Grid.Column="1" Grid.Row="2" Padding="10" ItemsSource="{Binding Cities}" SelectedItem="{Binding CurrCinema.City}" DisplayMemberPath="Name"/>
+                        <TextBlock Grid.Column="0" Grid.Row="3" Padding="10" Text="Улица:"/>
+                        <ComboBox  Grid.Column="1" Grid.Row="3" Padding="10" ItemsSource="{Binding Streets}" SelectedItem="{Binding CurrCinema.Street}" DisplayMemberPath="Name"/>
+                        <TextBlock Grid.Column="0" Grid.Row="4" Padding="10" Text="Дом:"/>
+                        <TextBox   Grid.Column="1" Grid.Row="4" Padding="10" Text="{Binding CurrCinema.Bilding}"/>
+                        <TextBlock Grid.Column="0" Grid.Row="5" Padding="10" Text="Телефон:"/>
+                        <TextBox   Grid.Column="1" Grid.Row="5" Padding="10" Text="{Binding CurrCinema.Tel}"/>
+                        <TextBlock Grid.Column="0" Grid.Row="6" Padding="10" Text="Описание:"/>
+                        <TextBox   Grid.Column="1" Grid.Row="6" Padding="10" Text="{Binding CurrCinema.Description}"/>
+                        <Button    Grid.Column="1" Grid.Row="11" Content="Сохранить изменения" Command="{Binding Save}"/>
+                    </Grid>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Залы">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid Grid.Column="0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="auto"/>
+                        </Grid.RowDefinitions>
+                        <ListBox Grid.Row="0" ItemsSource="{Binding Halls}" SelectedItem="{Binding CurrHall}" DisplayMemberPath="Name"/>
+                        <Button Grid.Row="1" Content="Добавить зал" Command="{Binding AddHall}"/>
+                    </Grid>
+                    <Grid Grid.Column="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="auto"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Column="0" Grid.Row="0" Padding="10" Text="Зал:"/>
+                        <TextBox   Grid.Column="1" Grid.Row="0" Padding="10" Text="{Binding CurrHall.Name}"/>
+                        <TextBlock Grid.Column="0" Grid.Row="2" Padding="10" Text="Кинотеатр:"/>
+                        <ComboBox  Grid.Column="1" Grid.Row="2" Padding="10" ItemsSource="{Binding Cinemas}" SelectedItem="{Binding CurrHall.Cinema}" DisplayMemberPath="Name"/>
+                        <TextBlock Grid.Column="0" Grid.Row="6" Padding="10" Text="Описание:"/>
+                        <TextBox   Grid.Column="1" Grid.Row="6" Padding="10" Text="{Binding CurrCinema.Description}"/>
+                        <Button    Grid.Column="1" Grid.Row="11" Content="Сохранить изменения" Command="{Binding Save}"/>
+                    </Grid>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Места">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <ListBox Grid.Column="0" ItemsSource="{Binding Halls}" SelectedItem="{Binding CurrHall}" DisplayMemberPath="Name"/>
+                    <Grid Grid.Column="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="auto"/>
+                        </Grid.RowDefinitions>
+                        <ListBox Grid.Row="0" ItemsSource="{Binding HallSeats}" SelectedItem="{Binding CurrHallSeat}" DisplayMemberPath="Row"/>
+                        <Button Grid.Row="1" Content="Добавить ряд" Command="{Binding AddHallSeat}"/>
+                    </Grid>
+                    <Grid Grid.Column="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="auto"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Column="0" Grid.Row="0" Padding="10" Text="Ряд:"/>
+                        <TextBox   Grid.Column="1" Grid.Row="0" Padding="10" Text="{Binding CurrHallSeat.Row}"/>
+                        <TextBlock Grid.Column="0" Grid.Row="1" Padding="10" Text="Количество мест:"/>
+                        <TextBox   Grid.Column="1" Grid.Row="1" Padding="10" Text="{Binding CurrHallSeat.Places}"/>
+                        <TextBlock Grid.Column="0" Grid.Row="2" Padding="10" Text="Класс мест:"/>
+                        <CheckBox  Grid.Column="1" Grid.Row="2" Padding="10" IsChecked="{Binding CurrHallSeat.PlaceType}" VerticalAlignment="Center"/>
+                        <Button    Grid.Column="1" Grid.Row="11" Content="Сохранить изменения" Command="{Binding Save}"/>
+                    </Grid>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Сессии">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid Grid.Column="0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="auto"/>
+                        </Grid.RowDefinitions>
+                        <ListBox Grid.Row="0" ItemsSource="{Binding Sessions}" SelectedItem="{Binding CurrSession}">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{Binding Hall.Name}"/>
+                                        <TextBlock Text="{Binding Film.Name}"/>
+                                        <TextBlock Text="{Binding Date}"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                        <Button Grid.Row="1" Content="Добавить сессию" Command="{Binding AddSession}"/>
+                    </Grid>
+                    <Grid Grid.Column="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="auto"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Column="0" Grid.Row="0" Padding="10" Text="Дата:"/>
+                        <DatePicker Grid.Column="1" Grid.Row="0" Padding="10" Text="{Binding CurrSession.Date}"/>
+                        <TextBlock Grid.Column="0" Grid.Row="1" Padding="10" Text="Фильм:"/>
+                        <ComboBox  Grid.Column="1" Grid.Row="1" Padding="10" ItemsSource="{Binding Films}" SelectedItem="{Binding CurrSession.Film}" DisplayMemberPath="Name"/>
+                        <TextBlock Grid.Column="0" Grid.Row="2" Padding="10" Text="Зал:"/>
+                        <ComboBox  Grid.Column="1" Grid.Row="2" Padding="10" ItemsSource="{Binding Halls}" SelectedItem="{Binding CurrSession.Hall}" DisplayMemberPath="Name"/>
+                        <TextBlock Grid.Column="0" Grid.Row="3" Padding="10" Text="Описание:"/>
+                        <TextBox   Grid.Column="1" Grid.Row="3" Padding="10" Text="{Binding CurrSession.Description}"/>
+                        <TextBlock Grid.Column="0" Grid.Row="4" Padding="10" Text="Цена:"/>
+                        <TextBox   Grid.Column="1" Grid.Row="4" Padding="10" Text="{Binding CurrSession.Price}"/>
+                        <TextBlock Grid.Column="0" Grid.Row="5" Padding="10" Text="Люкс:"/>
+                        <TextBox   Grid.Column="1" Grid.Row="5" Padding="10" Text="{Binding CurrSession.AddLux}"/>
+                        <Button    Grid.Column="1" Grid.Row="11" Content="Сохранить изменения" Command="{Binding Save}"/>
+                    </Grid>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Страны">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid Grid.Column="0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="auto"/>
+                        </Grid.RowDefinitions>
+                        <ListBox Grid.Row="0" ItemsSource="{Binding Countries}" SelectedItem="{Binding CurrCountry}" DisplayMemberPath="Name"/>
+                        <Button Grid.Row="1" Content="Добавить страну" Command="{Binding AddCountry}"/>
+                    </Grid>
+                    <Grid Grid.Column="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="auto"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Column="0" Grid.Row="0" Padding="10" Text="Страна:"/>
+                        <TextBox   Grid.Column="1" Grid.Row="0" Padding="10" Text="{Binding CurrCountry.Name}"/>
+                        <Button    Grid.Column="1" Grid.Row="8" Content="Сохранить изменения" Command="{Binding Save}"/>
+                    </Grid>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Языки">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid Grid.Column="0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="auto"/>
+                        </Grid.RowDefinitions>
+                        <ListBox Grid.Row="0" ItemsSource="{Binding Languages}" SelectedItem="{Binding CurrLanguage}" DisplayMemberPath="Name"/>
+                        <Button Grid.Row="1" Content="Добавить язык" Command="{Binding AddLanguage}"/>
+                    </Grid>
+                    <Grid Grid.Column="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="auto"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Column="0" Grid.Row="0" Padding="10" Text="Язык:"/>
+                        <TextBox   Grid.Column="1" Grid.Row="0" Padding="10" Text="{Binding CurrLanguage.Name}"/>
+                        <Button    Grid.Column="1" Grid.Row="8" Content="Сохранить изменения" Command="{Binding Save}"/>
+                    </Grid>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Жанры">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid Grid.Column="0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="auto"/>
+                        </Grid.RowDefinitions>
+                        <ListBox Grid.Row="0" ItemsSource="{Binding Languages}" SelectedItem="{Binding CurrLanguage}" DisplayMemberPath="Name"/>
+                        <Button Grid.Row="1" Content="Добавить язык" Command="{Binding AddLanguage}"/>
+                    </Grid>
+                    <Grid Grid.Column="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="auto"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Column="0" Grid.Row="0" Padding="10" Text="Язык:"/>
+                        <TextBox   Grid.Column="1" Grid.Row="0" Padding="10" Text="{Binding CurrLanguage.Name}"/>
+                        <Button    Grid.Column="1" Grid.Row="8" Content="Сохранить изменения" Command="{Binding Save}"/>
+                    </Grid>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Фильмы">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid Grid.Column="0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="auto"/>
+                        </Grid.RowDefinitions>
+                        <ListBox Grid.Row="0" ItemsSource="{Binding Films}" SelectedItem="{Binding CurrFilm}" DisplayMemberPath="Name"/>
+                        <Button Grid.Row="1" Content="Добавить фильм" Command="{Binding AddFilm}"/>
+                    </Grid>
+                    <Grid Grid.Column="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="auto"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Column="0" Grid.Row="0" Padding="10" Text="Название:"/>
+                        <TextBox   Grid.Column="1" Grid.Row="0" Padding="10" Text="{Binding CurrFilm.Name}"/>
+                        <TextBlock Grid.Column="0" Grid.Row="1" Padding="10" Text="Оригинальное:"/>
+                        <TextBox   Grid.Column="1" Grid.Row="1" Padding="10" Text="{Binding CurrFilm.NameOrigin}"/>
+
+                        <TextBlock Grid.Column="0" Grid.Row="2" Padding="10" Text="Описание:"/>
+                        <TextBox   Grid.Column="1" Grid.Row="2" Padding="10" Text="{Binding CurrFilm.Description}"/>
+                        <TextBlock Grid.Column="0" Grid.Row="3" Padding="10" Text="Возвраст:"/>
+                        <TextBox   Grid.Column="1" Grid.Row="3" Padding="10" Text="{Binding CurrFilm.Age}"/>
+                        <TextBlock Grid.Column="0" Grid.Row="4" Padding="10" Text="Продолжительность:"/>
+                        <TextBox   Grid.Column="1" Grid.Row="4" Padding="10" Text="{Binding CurrFilm.Duration}"/>
+
+                        <TextBlock Grid.Column="0" Grid.Row="5" Padding="10" Text="Язык:"/>
+                        <ComboBox  Grid.Column="1" Grid.Row="5" Padding="10" ItemsSource="{Binding Languages}" SelectedItem="{Binding CurrFilm.Language}" DisplayMemberPath="Name"/>
+                        <TextBlock  Grid.Column="0" Grid.Row="6" Padding="10" Text="Начаало проката:"/>
+                        <DatePicker Grid.Column="1" Grid.Row="6" Padding="10" SelectedDate="{Binding CurrFilm.StartRental}"/>
+                        <TextBlock  Grid.Column="0" Grid.Row="7" Padding="10" Text="Конец проката:"/>
+                        <DatePicker Grid.Column="1" Grid.Row="7" Padding="10" SelectedDate="{Binding CurrFilm.EndRental}"/>
+                        <Button     Grid.Column="1" Grid.Row="8" Padding="10" Content="Постер" Command="{Binding AddPicture}"/>
+                        <Button    Grid.Column="1" Grid.Row="11" Content="Сохранить изменения" Command="{Binding Save}"/>
+                    </Grid>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Позиции">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid Grid.Column="0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="auto"/>
+                        </Grid.RowDefinitions>
+                        <ListBox Grid.Row="0" ItemsSource="{Binding Positions}" SelectedItem="{Binding CurrPosition}" DisplayMemberPath="Name"/>
+                        <Button Grid.Row="1" Content="Добавить позицию" Command="{Binding AddPosition}"/>
+                    </Grid>
+                    <Grid Grid.Column="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="auto"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Column="0" Grid.Row="0" Padding="10" Text="Позиция:"/>
+                        <TextBox Grid.Column="1" Grid.Row="0" Padding="10" Text="{Binding CurrPosition.Name}"/>
+                        <Button    Grid.Column="1" Grid.Row="8" Content="Сохранить изменения" Command="{Binding Save}"/>
+                    </Grid>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Сотрудники">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid Grid.Column="0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="auto"/>
+                        </Grid.RowDefinitions>
+                        <ListBox Grid.Row="0" ItemsSource="{Binding Employees}" SelectedItem="{Binding CurrEmployee}">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{Binding Firstname}"/>
+                                        <TextBlock Text="{Binding Lastname}"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                        <Button Grid.Row="1" Content="Добавить пользователя" Command="{Binding AddEmployee}"/>
+                    </Grid>
+                    <Grid Grid.Column="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="auto"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Column="0" Grid.Row="0" Padding="10" Text="Имя:"/>
+                        <TextBox Grid.Column="1" Grid.Row="0" Padding="10" Text="{Binding CurrEmployee.Firstname}"/>
+                        <TextBlock Grid.Column="0" Grid.Row="1" Padding="10" Text="Фамилия:"/>
+                        <TextBox Grid.Column="1" Grid.Row="1" Padding="10" Text="{Binding CurrEmployee.Lastname}"/>
+                        <TextBlock Grid.Column="0" Grid.Row="2" Padding="10" Text="Позиция:"/>
+                        <ComboBox  Grid.Column="1" Grid.Row="2" Padding="10" ItemsSource="{Binding Positions}" SelectedItem="{Binding CurrEmployee.Position}" DisplayMemberPath="Name"/>
+                        <TextBlock Grid.Column="0" Grid.Row="3" Padding="10" Text="Кинотеатр:"/>
+                        <ComboBox  Grid.Column="1" Grid.Row="3" Padding="10" ItemsSource="{Binding Cinemas}" SelectedItem="{Binding CurrEmployee.Cinema}" DisplayMemberPath="Name"/>
+                        <TextBlock Grid.Column="0" Grid.Row="4" Padding="10" Text="Дата рождения:"/>
+                        <DatePicker Grid.Column="1" Grid.Row="4" Padding="10" Text="{Binding CurrEmployee.Birthdate}"/>
+                        <TextBlock Grid.Column="0" Grid.Row="5" Padding="10" Text="Дата найма:"/>
+                        <DatePicker Grid.Column="1" Grid.Row="5" Padding="10" Text="{Binding CurrEmployee.Hiredate}"/>
+                        <TextBlock Grid.Column="0" Grid.Row="6" Padding="10" Text="Телефон:"/>
+                        <TextBox Grid.Column="1" Grid.Row="6" Padding="10" Text="{Binding CurrEmployee.Phone}"/>
+                        <TextBlock Grid.Column="0" Grid.Row="7" Padding="10" Text="Логин:"/>
+                        <TextBox Grid.Column="1" Grid.Row="7" Padding="10" Text="{Binding CurrEmployee.EmployeesLogin.EmpName}"/>
+                        <TextBlock Grid.Column="0" Grid.Row="8" Padding="10" Text="Пароль:"/>
+                        <TextBox Grid.Column="1" Grid.Row="8" Padding="10" Text="{Binding CurrEmployee.EmployeesLogin.Password}"/>
+                        <Button    Grid.Column="1" Grid.Row="11" Content="Сохранить изменения" Command="{Binding Save}"/>
+                    </Grid>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Пользователи">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <ListBox Grid.Column="0" ItemsSource="{Binding Users}" SelectedItem="{Binding CurrUser}" DisplayMemberPath="Email"/>
+                    <Grid Grid.Column="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="auto"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Column="0" Grid.Row="0" Text="Логин"/>
+                        <TextBox   Grid.Column="1" Grid.Row="0" Text="{Binding CurrUser.Email}" IsEnabled="False"/>
+                        <TextBlock Grid.Column="0" Grid.Row="1" Text="Пароль"/>
+                        <TextBox   Grid.Column="1" Grid.Row="1" Text="{Binding CurrUser.Password}"/>
+                        <Button    Grid.Column="1" Grid.Row="3" Content="Сохранить изменения" Command="{Binding Save}"/>
+                    </Grid>
+                    <ListBox Grid.Column="3" ItemsSource="{Binding CurrUser.Tickets}" ScrollViewer.CanContentScroll="False">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="*"/>
+                                    </Grid.RowDefinitions>
+                                    <TextBlock Grid.Column="0" Grid.Row="0" Text="Id:"/>
+                                    <TextBlock Grid.Column="1" Grid.Row="0" Text="{Binding Id}"/>
+                                    <TextBlock Grid.Column="0" Grid.Row="1" Text="Кинотеатр:"/>
+                                    <TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding Session.Hall.Cinema.Name}"/>
+                                    <TextBlock Grid.Column="0" Grid.Row="2" Text="Зал:"/>
+                                    <TextBlock Grid.Column="1" Grid.Row="2" Text="{Binding Session.Hall.Name}"/>
+                                    <TextBlock Grid.Column="0" Grid.Row="3" Text="Фильм:"/>
+                                    <TextBlock Grid.Column="1" Grid.Row="3" Text="{Binding Session.Film.Name}"/>
+                                    <TextBlock Grid.Column="0" Grid.Row="4" Text="Дата и время:"/>
+                                    <TextBlock Grid.Column="1" Grid.Row="4" Text="{Binding Date}"/>
+                                    <TextBlock Grid.Column="0" Grid.Row="5" Text="Ряд:"/>
+                                    <TextBlock Grid.Column="1" Grid.Row="5" Text="{Binding Row}"/>
+                                    <TextBlock Grid.Column="0" Grid.Row="6" Text="Место:"/>
+                                    <TextBlock Grid.Column="1" Grid.Row="6" Text="{Binding Place}"/>
+                                    <TextBlock Grid.Column="0" Grid.Row="7" Text="Цена:"/>
+                                    <TextBlock Grid.Column="1" Grid.Row="7" Text="{Binding Price}"/>
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>

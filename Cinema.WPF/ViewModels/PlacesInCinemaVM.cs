@@ -2,6 +2,7 @@
 using Cinema.DAL.Infrastructure;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Configuration;
 using System.IO;
@@ -29,49 +30,35 @@ namespace Cinema.WPF.ViewModels
 
         private Session session;
         public Session Session { get => session; set { session = value; OnPropertyChanged(); Places = CreateHall(); } }
-        public Grid Places { get; set; }
+        public User User { get; set; }
+
         private CinemaContext Context;
         public TcpClient Client;
         public NetworkStream Stream;
+
+        public Grid Places { get; set; }
         public List<List<Button>> ArrBtn;
-        Thread main;
+        private ObservableCollection<Button> tickets;
+        public ObservableCollection<Button> Tickets { get => tickets; set { tickets = value; OnPropertyChanged(); } }
+        public decimal Price { get; set; }
+
+        Button btntest;
         public PlacesInCinemaVM()
         {
             try
             {
-                main = Thread.CurrentThread;
                 Client = new TcpClient(ConfigurationManager.AppSettings["ServerIpAddress"], int.Parse(ConfigurationManager.AppSettings["ServerPort"]));
                 Stream = Client.GetStream();
+                Tickets = new ObservableCollection<Button>();
                 Context = new CinemaContext();
-                //sw = new StreamWriter(Stream, Encoding.Unicode);
                 ArrBtn = new List<List<Button>>();
-                //Task.Run(() =>
-                //{
-                //    byte[] arr = new byte[20];
-                //    do
-                //    {
-                //        int len = Stream.Read(arr, 0, arr.Length);
-                //        string loc = Encoding.Unicode.GetString(arr, 0, len);
-                //        if (loc.Length > 1)
-                //        {
-                //            int row = int.Parse(loc.Substring(0, loc.IndexOf("/"))) - 1;
-                //            int place = int.Parse(loc.Substring(loc.IndexOf("/") + 1)) - 1;
-                //            //user1 @ukr.net
-                //            //Dispatcher.CurrentDispatcher.Invoke(() => ArrBtn[row][place].IsEnabled = !ArrBtn[row][place].IsEnabled);
-                //            new Action(() => ArrBtn[row][place].IsEnabled = !ArrBtn[row][place].IsEnabled).Invoke();
-                //            //new Thread(() => {  ArrBtn[row][place].IsEnabled = !ArrBtn[row][place].IsEnabled; });
-                //            //main.Start();
-                //            //Dispatcher.CurrentDispatcher.Invoke(() => );
-                //            //Dispatcher.CurrentDispatcher.Invoke(() => { main.Join(); ArrBtn[row][place].IsEnabled = !ArrBtn[row][place].IsEnabled; });
-                //            //Dispatcher.Run();//.Invoke(() => ArrBtn[row][place].IsEnabled = !ArrBtn[row][place].IsEnabled);
-                //        }
-                //    } while (true);
-                //});
                 GetPlace = new RelayCommand(GetPlaceMethod);
                 btntest = new Button() { Content = "test" };
+                BuyTickets = new RelayCommand(BuyTicketsMethod);
+                Closing = new RelayCommand(ClosingMethod);
                 Some();
             }
-            catch(SocketException ex)
+            catch (SocketException ex)
             {
                 MessageBox.Show("Ошибка подключение к серверу", "Error");
             }
@@ -79,17 +66,14 @@ namespace Cinema.WPF.ViewModels
         private async Task Some()
         {
             byte[] arr = new byte[20];
-            //StreamReader sr = new StreamReader(Stream, Encoding.Unicode);
             do
             {
                 int len = await Stream.ReadAsync(arr, 0, arr.Length);
                 string loc = Encoding.Unicode.GetString(arr, 0, len);
-                //string loc = await sr.ReadLineAsync();
                 if (loc.Length > 1)
                 {
                     int row = int.Parse(loc.Substring(0, loc.IndexOf("/"))) - 1;
                     int place = int.Parse(loc.Substring(loc.IndexOf("/") + 1)) - 1;
-                    //user1@ukr.net
                     ArrBtn[row][place].IsEnabled = !ArrBtn[row][place].IsEnabled;
                 }
             } while (true);
@@ -126,12 +110,13 @@ namespace Cinema.WPF.ViewModels
                     if (hallSeats[r].PlaceType)
                     {
                         btn.BorderBrush = Brushes.DarkRed;
-                        btn.Background = Brushes.Green;
                         btn.BorderThickness = new Thickness(2);
                     }
                     btn.Content = $"{hallSeats[r].Row: ##}/{i + 1: ##}";
+                    btn.Tag = Session.Price + (hallSeats[r].PlaceType ? Session.AddLux : 0);
                     btn.Command = GetPlace;
                     btn.CommandParameter = btn;
+                    btn.ToolTip = new TextBlock { Text = $"Ряд:{hallSeats[r].Row}  Место:{i + 1}  Цена:{Session.Price + (hallSeats[r].PlaceType ? Session.AddLux : 0): 0 грн}" };
                     Grid.SetRow(btn, hallSeats[r].Row - 1);
                     Grid.SetColumn(btn, i + offset);
                     grid.Children.Add(btn);
@@ -140,25 +125,56 @@ namespace Cinema.WPF.ViewModels
             }
             foreach (var t in tickects)
             {
-                ArrBtn[t.Row][t.Place].IsEnabled = false;
+                ArrBtn[t.Row - 1][t.Place - 1].IsEnabled = false;
             }
             return grid;
         }
 
-        Button btntest;
-        //StreamWriter sw;
         public RelayCommand GetPlace { get; set; }
         private void GetPlaceMethod(object obj)
         {
             Button btn = obj as Button;
-            //btn.IsEnabled = !btn.IsEnabled
             var arr = Encoding.Unicode.GetBytes((string)((Button)obj).Content);
             Stream.Write(arr, 0, arr.Length);
-            //sw.WriteLine((string)((Button)obj).Content);
-            if (btn.Background == btntest.Background)
+            if (btn.Background != Brushes.Green)
+            {
                 btn.Background = Brushes.Green;
+                Tickets.Add(btn);
+                Price += (decimal)btn.Tag;
+            }
             else
-                btn.Background = btntest.Background.Clone();
+            {
+                btn.Background = btntest.Background;
+                Tickets.Remove(btn);
+                Price -= (decimal)btn.Tag;
+            }
+            OnPropertyChanged("Price");
+        }
+
+        public RelayCommand BuyTickets { get; set; }
+        private void BuyTicketsMethod(object obj)
+        {
+            if(MessageBox.Show("Вы подтверждаете покупку?", "Подтверждение покупки", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            {
+                for (int i = Tickets.Count - 1; i >= 0; i--)
+                {
+                    string temp = (string)Tickets[i].Content;
+                    int row = int.Parse(temp.Substring(0, temp.IndexOf('/')));
+                    int place = int.Parse(temp.Substring(temp.IndexOf('/') + 1));
+                    Context.Tickets.Add(new Ticket() { Date = DateTime.Now, SessionId = Session.Id, UserId = User.Id, Row = row, Place = place, Price = (decimal)Tickets[i].Tag });
+                    Context.SaveChanges();
+                    GetPlaceMethod(Tickets[i]);
+                }
+            }
+        }
+
+        public RelayCommand Closing { get; set; }
+        private void ClosingMethod(object obj)
+        {
+            for (int i = Tickets.Count - 1; i >= 0; i--)
+            {
+                GetPlaceMethod(Tickets[i]);
+            }
         }
     }
 }

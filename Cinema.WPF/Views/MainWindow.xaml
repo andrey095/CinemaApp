@@ -29,7 +29,7 @@
             <ComboBox ItemsSource="{Binding Cities}"  SelectedItem="{Binding CurrCity}"   DisplayMemberPath="Name" SelectedIndex="0" Width="100"/>
             <ComboBox ItemsSource="{Binding Cinemas}" SelectedItem="{Binding CurrCinema}" DisplayMemberPath="Name" SelectedIndex="0" Width="150"/>
         </StackPanel>
-        <Button Grid.Row="0" Grid.Column="7943" Content="{Binding UserName}" Command="{Binding Login}"/>
+        <Button Grid.Row="0" Grid.Column="1" Content="{Binding UserName}" Command="{Binding Login}"/>
         <ListBox ItemsSource="{Binding Films}" SelectedItem="{Binding CurrFilm}" Grid.Row="1" Grid.Column="0" ScrollViewer.HorizontalScrollBarVisibility="Visible" ScrollViewer.CanContentScroll="False" Background="LemonChiffon">
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>

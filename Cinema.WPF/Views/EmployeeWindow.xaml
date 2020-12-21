@@ -1,0 +1,91 @@
+﻿<Window x:Class="Cinema.WPF.Views.EmployeeWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:res="clr-namespace:Cinema.WPF.ViewModels"
+        xmlns:local="clr-namespace:Cinema.WPF.Views"
+        mc:Ignorable="d"
+        Title="EmployeeWindow" Height="350" Width="400">
+    <Window.DataContext>
+        <res:EmployeeWindowVM/>
+    </Window.DataContext>
+    <Grid>
+        <TabControl>
+            <TabItem Header="Общее">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="auto"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Column="0" Grid.Row="0" Padding="10" Text="Имя:"/>
+                    <TextBlock Grid.Column="1" Grid.Row="0" Padding="10" Text="{Binding Employee.Firstname}"/>
+                    <TextBlock Grid.Column="0" Grid.Row="1" Padding="10" Text="Фамилия:"/>
+                    <TextBlock Grid.Column="1" Grid.Row="1" Padding="10" Text="{Binding Employee.Lastname}"/>
+                    <TextBlock Grid.Column="0" Grid.Row="2" Padding="10" Text="Позиция:"/>
+                    <TextBlock Grid.Column="1" Grid.Row="2" Padding="10" Text="{Binding Employee.Position.Name}"/>
+                    <TextBlock Grid.Column="0" Grid.Row="3" Padding="10" Text="Кинотеатр:"/>
+                    <TextBlock Grid.Column="1" Grid.Row="3" Padding="10" Text="{Binding Employee.Cinema.Name}"/>
+                    <TextBlock Grid.Column="0" Grid.Row="4" Padding="10" Text="Дата рождения:"/>
+                    <TextBlock Grid.Column="1" Grid.Row="4" Padding="10" Text="{Binding Employee.Birthdate}"/>
+                    <TextBlock Grid.Column="0" Grid.Row="5" Padding="10" Text="Дата найма:"/>
+                    <TextBlock Grid.Column="1" Grid.Row="5" Padding="10" Text="{Binding Employee.Hiredate}"/>
+                    <TextBlock Grid.Column="0" Grid.Row="6" Padding="10" Text="Телефон:"/>
+                    <TextBlock Grid.Column="1" Grid.Row="6" Padding="10" Text="{Binding Employee.Phone}"/>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Возврат билетов">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="auto"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Column="0" Grid.Row="0" Text="Поиск Id:"/>
+                    <TextBox   Grid.Column="1" Grid.Row="0" Text="{Binding Id, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    <TextBlock Grid.Column="0" Grid.Row="1" Text="Id:"/>
+                    <TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding Ticket.Id}"/>
+                    <TextBlock Grid.Column="0" Grid.Row="2" Text="Кинотеатр:"/>
+                    <TextBlock Grid.Column="1" Grid.Row="2" Text="{Binding Ticket.Session.Hall.Cinema.Name}"/>
+                    <TextBlock Grid.Column="0" Grid.Row="3" Text="Зал:"/>
+                    <TextBlock Grid.Column="1" Grid.Row="3" Text="{Binding Ticket.Session.Hall.Name}"/>
+                    <TextBlock Grid.Column="0" Grid.Row="4" Text="Фильм:"/>
+                    <TextBlock Grid.Column="1" Grid.Row="4" Text="{Binding Ticket.Session.Film.Name}"/>
+                    <TextBlock Grid.Column="0" Grid.Row="5" Text="Дата и время:"/>
+                    <TextBlock Grid.Column="1" Grid.Row="5" Text="{Binding Ticket.Date}"/>
+                    <TextBlock Grid.Column="0" Grid.Row="6" Text="Ряд:"/>
+                    <TextBlock Grid.Column="1" Grid.Row="6" Text="{Binding Ticket.Row}"/>
+                    <TextBlock Grid.Column="0" Grid.Row="7" Text="Место:"/>
+                    <TextBlock Grid.Column="1" Grid.Row="7" Text="{Binding Ticket.Place}"/>
+                    <TextBlock Grid.Column="0" Grid.Row="8" Text="Цена:"/>
+                    <TextBlock Grid.Column="1" Grid.Row="8" Text="{Binding Ticket.Price}"/>
+                    <Button Grid.Column="1" Grid.Row="10" Content="Вернуть билет" Command="{Binding ReturnTicket}"/>
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>

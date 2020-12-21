@@ -30,3 +30,11 @@ D:\Source\repos\CinemaApp\Cinema.WPF\obj\Debug\Views\FilmWindow.baml
 D:\Source\repos\CinemaApp\Cinema.WPF\obj\Debug\Views\PlacesInCinemaWindow.g.cs
 D:\Source\repos\CinemaApp\Cinema.WPF\obj\Debug\Views\PlacesInCinemaWindow.baml
 D:\Source\repos\CinemaApp\Cinema.WPF\bin\Debug\ru\EntityFramework.SqlServer.resources.dll
+D:\Source\repos\CinemaApp\Cinema.WPF\bin\Debug\Microsoft.Expression.Interactions.dll
+D:\Source\repos\CinemaApp\Cinema.WPF\bin\Debug\System.Windows.Interactivity.dll
+D:\Source\repos\CinemaApp\Cinema.WPF\bin\Debug\Microsoft.Expression.Interactions.xml
+D:\Source\repos\CinemaApp\Cinema.WPF\bin\Debug\System.Windows.Interactivity.xml
+D:\Source\repos\CinemaApp\Cinema.WPF\obj\Debug\Views\UserWindow.g.cs
+D:\Source\repos\CinemaApp\Cinema.WPF\obj\Debug\Views\UserWindow.baml
+D:\Source\repos\CinemaApp\Cinema.WPF\obj\Debug\Views\EmployeeWindow.g.cs
+D:\Source\repos\CinemaApp\Cinema.WPF\obj\Debug\Views\EmployeeWindow.baml

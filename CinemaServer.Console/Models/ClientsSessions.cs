@@ -12,11 +12,13 @@ namespace CinemaServer.Console.Models
     {
         public Session Session { get; set; }
         public List<TcpClient> Clients { get; set; }
+        public List<(int row, int place)> Places { get; set; }
 
         public ClientsSessions(Session session)
         {
             Session = session;
             Clients = new List<TcpClient>();
+            Places = new List<(int row, int place)>();
         }
     }
 }

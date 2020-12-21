@@ -90,7 +90,7 @@ namespace Cinema.WPF.ViewModels
                 var tomorrow = DateTime.Today.AddDays(1);
                 FilmsSessions = (from s in Context.Sessions
                                  join hl in (from h in Context.Halls where h.CinemaId == CurrCinema.Id select h) on s.HallId equals hl.Id
-                                 where s.Date > DateTime.Today && s.Date < tomorrow && s.FilmId == CurrFilm.Id
+                                 where s.Date > DateTime.Now && s.Date < tomorrow && s.FilmId == CurrFilm.Id
                                  select s).GroupBy(s => s.Hall).Select(t => new SessionsForHall{ Hall = t.Key, Sessions = t.Select(s => s) }).ToList();
             }
         }
@@ -99,14 +99,13 @@ namespace Cinema.WPF.ViewModels
         public List<SessionsForHall> FilmsSessions { get => filmsSessions; set { filmsSessions = value; OnPropertyChanged(); } }
 
 
-        public MainWindowVM()//помянять запрос с Today на Now в CurrDate (where s.Date > DateTime.Today && s.Date < tomorrow && s.FilmId == CurrFilm.Id)
+        public MainWindowVM()
         {
             Context = new CinemaContext();
             Cities = Context.Cities.ToList();
             BuyTicket = new RelayCommand(BuyTicketMethod);
             Login = new RelayCommand(LoginMethod);
-            LoginW = new LoginWindow() { WindowStartupLocation = WindowStartupLocation.CenterOwner};
-            LoginVM = (LoginWindowVM)LoginW.DataContext;
+            LoginVM = new LoginWindowVM();
             ShowDetails = new RelayCommand(ShowDetailsMethod);
         }
         public RelayCommand BuyTicket { get; set; }
@@ -122,13 +121,13 @@ namespace Cinema.WPF.ViewModels
                     if (dataC?.Client?.Connected != true)
                         return;
                     dataC.Session = temp;
+                    dataC.User = new User { Id = LoginVM.Id, Email = LoginVM.Login, Password = LoginVM.Pass };
                     Grid g = dataC.Places;
                     Grid.SetRow(g, 1);
                     Grid.SetColumn(g, 1);
                     window.grd1.Children.Add(g);
                     window.ShowDialog();
                     dataC.Client.Client.Close();
-                    //dataC.Client.Close();
                 }
                 catch(Exception ex)
                 {
@@ -148,10 +147,27 @@ namespace Cinema.WPF.ViewModels
         {
             if(LoginVM.LoggedIn == false)
             {
+                LoginW = new LoginWindow();
+                LoginVM = (LoginWindowVM)LoginW.DataContext;
                 LoginW.ShowDialog();
                 if (LoginVM.LoggedIn == true)
                 {
                     UserName = LoginVM.Login;
+                }
+            }
+            else
+            {
+                if (LoginVM.IsEmployee == false)
+                {
+                    UserWindow window = new UserWindow();
+                    ((UserWindowVM)window.DataContext).User = Context.Users.FirstOrDefault(u => u.Id == LoginVM.Id);
+                    window.ShowDialog();
+                }
+                else
+                {
+                    EmployeeWindow window = new EmployeeWindow();
+                    ((EmployeeWindowVM)window.DataContext).Employee = Context.Employees.FirstOrDefault(e => e.Id == LoginVM.Id);
+                    window.ShowDialog();
                 }
             }
         }

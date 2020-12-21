@@ -39,9 +39,5 @@
             <TextBlock Text="{Binding Path=EndRental.Date, StringFormat={}{0:-dd.MM.yyyy}}"/>
         </StackPanel>
         <TextBlock Grid.Row="9" Grid.ColumnSpan="2" TextWrapping="Wrap" Text="{Binding Path=Description}"/>
-
-<!--Мова:Українська мова
-Жанр:Комедія
-Виробництво:Данія-->
     </Grid>
 </Window>

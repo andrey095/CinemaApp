@@ -31,7 +31,7 @@ namespace Cinema.DAL.DomainModels
 
         public DateTime Hiredate { get; set; }
 
-        public int CinemaId { get; set; }
+        public int? CinemaId { get; set; }
 
         [Required]
         [StringLength(20)]

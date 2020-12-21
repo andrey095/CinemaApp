@@ -41,11 +41,11 @@ namespace Cinema.WPF.ViewModels
                     Id = ((EmployeesLogin)temp).Id;
                 else
                     Id = ((User)temp).Id;
-                MessageBox.Show("You entered");
+                MessageBox.Show("Вы авторизованы");
                 Application.Current.Windows[1].Close();
             }
             else
-                MessageBox.Show("Wrong data");
+                MessageBox.Show("Неправильные данные");
         }
         public RelayCommand Registration { get; set; }
         private void RegistrationMethod(object obj)
@@ -54,10 +54,10 @@ namespace Cinema.WPF.ViewModels
             {
                 Context.Users.Add(new User() { Email = Login, Password = Pass });
                 Context.SaveChanges();
-                MessageBox.Show("User added");
+                MessageBox.Show("Пользователь добавлен");
             }
             else
-                MessageBox.Show("User exists");
+                MessageBox.Show("Пользователь существует");
         }
     }
 }
